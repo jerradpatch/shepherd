@@ -25,6 +25,13 @@ Example:
                         --mount type=bind,source=/var/run/docker.sock,target=/var/run/docker.sock,ro \
                         mazzolino/shepherd
 
+If you want to use private registry provide those variables:
+    
+     --env REGISTRY_HOST=myreg.azurecr.io \
+     --env REGISTRY_USERNAME=myreg \
+     --env REGISTRY_PASSWORD=passwordforprivateregistry \
+
+
 ## How does it work?
 
 Shepherd just triggers updates by updating the image specification for each service, removing the current digest.

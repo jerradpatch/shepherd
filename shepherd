@@ -18,15 +18,18 @@ update_services() {
       image_with_digest="$(docker service inspect "$service" -f '{{.Spec.TaskTemplate.ContainerSpec.Image}}')"
       image=$(echo "$image_with_digest" | cut -d@ -f1)
       echo "Updating service $name with image $image"
-      docker service update "$service" $detach_option --image="$image" > /dev/null
+      docker service update --with-registry-auth "$service" $detach_option --image="$image" > /dev/null
     fi
   done
 }
 
 main() {
-  local blacklist sleep_time supports_detach_option
+  local blacklist sleep_time supports_detach_option registry_host registry_username registry_password
   blacklist="${BLACKLIST_SERVICES:-}"
   sleep_time="${SLEEP_TIME:-5m}"
+  registry_host="${REGISTRY_HOST:-}"
+  registry_username="${REGISTRY_USERNAME:-}"
+  registry_password="${REGISTRY_PASSWORD:-}"
 
   supports_detach_option=false
   if [[ "$(server_version)" > "17.05" ]]; then
@@ -36,6 +39,8 @@ main() {
     supports_detach_option=false
   fi
 
+  [[ "$registry_host" != "" ]] && echo "Using private registry at: $registry_username@$registry_host" && docker login --username $registry_username --password $registry_password $registry_host
+  
   [[ "$blacklist" != "" ]] && echo "Excluding services: $blacklist"
 
   while true; do
