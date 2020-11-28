@@ -5,13 +5,18 @@ services:
     build: .
     image: mazzolino/shepherd
     environment:
-      TZ: 'US/Eastern'
-      SLEEP_TIME: '5m'
-      FILTER_SERVICES: ''
-      VERBOSE: 'true'
+      FILTER_SERVICES: "name=amm"
+      WITH_REGISTRY_AUTH: "true"
+      SLEEP_TIME: "30s"
+      IMAGE_AUTOCLEAN_LIMIT: "3"
+      REGISTRY_HOST: "https://index.docker.io/v1/"
+      REGISTRY_USERNAME: "jerradpatch"
+      REGISTRY_PASSWORD: "Darrej12"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     deploy:
       placement:
         constraints:
         - node.role == manager
+
+

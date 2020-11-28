@@ -66,7 +66,12 @@ If you want to use private registry provide those variables:
      --env REGISTRY_USERNAME=myreg \
      --env REGISTRY_PASSWORD=passwordforprivateregistry \
 
-
+None of the above creds have a default, so REGISTRY_HOST must be set.
+The private registry of dockerhub is "https://index.docker.io/v1/". This can be verified
+by logging in using the following command
+```bash
+docker login ---username <username> ---password <password> https://index.docker.io/v1/
+```
 ## How does it work?
 
 Shepherd just triggers updates by updating the image specification for each service, removing the current digest.
